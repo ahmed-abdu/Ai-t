@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Team Hub</title>
+<style>
+*{box-sizing:border-box}
+body{
+margin:0;
+padding:20px;
+min-height:100vh;
+background:#10131b;
+color:#f5f7fb;
+font-family:Arial,sans-serif
+}
+main{max-width:720px;margin:auto}
+h1{font-size:26px}
+p{color:#b8c0d4;line-height:1.7}
+textarea{
+width:100%;
+min-height:180px;
+padding:14px;
+border-radius:12px;
+border:1px solid #394157;
+background:#191e2b;
+color:white;
+font-size:16px
+}
+.buttons{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+margin:12px 0
+}
+button,a{
+border:0;
+border-radius:10px;
+padding:12px;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+text-align:center;
+text-decoration:none
+}
+button{background:#c8d4ff;color:#10131b}
+a{background:#252c3d;color:white}
+#status{color:#9be7bd}
+.note{font-size:14px}
+</style>
+</head>
+<body>
+<main>
+<h1>مساحة ChatGPT + Claude</h1>
+<p>اكتب طلبك مرة واحدة، ثم انسخه وافتح أي مساعد للصق الطلب هناك.</p>
+
+<textarea id="prompt" placeholder="اكتب طلبك هنا..."></textarea>
+
+<div class="buttons">
+<button id="copy">نسخ الطلب</button>
+<button id="clear">مسح النص</button>
+<a href="https://chatgpt.com/" target="_blank" rel="noopener">فتح ChatGPT</a>
+<a href="https://claude.ai/" target="_blank" rel="noopener">فتح Claude</a>
+</div>
+
+<p id="status"></p>
+
+<p class="note">
+هذه الصفحة تساعدك على نسخ الطلب وفتح الخدمتين، لكنها لا تربطهما تلقائيًا. الربط المباشر يحتاج إعدادًا إضافيًا وقد يتطلب API مدفوعًا.
+</p>
+</main>
+
+<script>
+const promptBox=document.getElementById('prompt');
+const status=document.getElementById('status');
+
+document.getElementById('copy').addEventListener('click',async()=>{
+const value=promptBox.value;
+
+if(!value.trim()){
+status.textContent='اكتب طلبك أولًا.';
+return;
+}
+
+try{
+await navigator.clipboard.writeText(value);
+status.textContent='تم نسخ الطلب.';
+}catch{
+promptBox.focus();
+promptBox.select();
+const ok=document.execCommand('copy');
+status.textContent=ok?'تم نسخ الطلب.':'حدد النص وانسخه يدويًا.';
+}
+});
+
+document.getElementById('clear').addEventListener('click',()=>{
+promptBox.value='';
+status.textContent='';
+promptBox.focus();
+});
+</script>
+</body>
+</html>
